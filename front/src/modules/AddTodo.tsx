@@ -19,6 +19,7 @@ const AddTodo: React.FC<AddTodoProps> = ({ createTodo }) => {
     <ListItem
       secondaryAction={
         <Button
+          variant="contained"
           onClick={(e) => {
             e.preventDefault();
             createTodo({ todo: addTask });

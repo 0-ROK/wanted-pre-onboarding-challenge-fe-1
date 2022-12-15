@@ -67,5 +67,19 @@ export const useTodo = () => {
     }
   };
 
-  return { createTodo, getTodos, todos, updateTodo };
+  const deleteTodo = async (id: number) => {
+    try {
+      const response = await axios.delete(`/todos/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+      if (response.status !== 204) throw Error("실패");
+      getTodos();
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  return { createTodo, getTodos, todos, updateTodo, deleteTodo };
 };
