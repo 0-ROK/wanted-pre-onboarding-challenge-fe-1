@@ -14,7 +14,7 @@ import { useTodo } from "../hooks/useTodo";
 import AddTodo from "../modules/AddTodo";
 
 const TodoPage = () => {
-  const { todos, createTodo, updateTodo } = useTodo();
+  const { todos, createTodo, updateTodo, deleteTodo } = useTodo();
   const [editTodo, setEditTodo] = useState<string>("");
 
   return (
@@ -36,17 +36,30 @@ const TodoPage = () => {
               <ListItem
                 key={todo.id}
                 secondaryAction={
-                  <Button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      updateTodo(todo.id, {
-                        todo: editTodo,
-                        isCompleted: todo.isCompleted,
-                      });
-                    }}
-                  >
-                    수정
-                  </Button>
+                  <>
+                    <Button
+                      variant="outlined"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        updateTodo(todo.id, {
+                          todo: editTodo,
+                          isCompleted: todo.isCompleted,
+                        });
+                      }}
+                    >
+                      수정
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        deleteTodo(todo.id);
+                      }}
+                    >
+                      삭제
+                    </Button>
+                  </>
                 }
                 disablePadding
               >

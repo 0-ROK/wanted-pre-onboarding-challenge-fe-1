@@ -12,6 +12,11 @@ export interface ToDoItem {
   userId: number;
 }
 
+export interface UpdateTodoPayload {
+  todo: string;
+  isCompleted: boolean;
+}
+
 export const useTodo = () => {
   const createTodo = async (payload: CreateTodoPayload) => {
     try {
@@ -48,11 +53,6 @@ export const useTodo = () => {
     getTodos();
   }, []);
 
-  interface UpdateTodoPayload {
-    todo: string;
-    isCompleted: boolean;
-  }
-
   const updateTodo = async (id: number, payload: UpdateTodoPayload) => {
     try {
       const response = await axios.put(`/todos/${id}`, payload, {
@@ -67,5 +67,19 @@ export const useTodo = () => {
     }
   };
 
-  return { createTodo, getTodos, todos, updateTodo };
+  const deleteTodo = async (id: number) => {
+    try {
+      const response = await axios.delete(`/todos/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+      if (response.status !== 204) throw Error("실패");
+      getTodos();
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  return { createTodo, getTodos, todos, updateTodo, deleteTodo };
 };
