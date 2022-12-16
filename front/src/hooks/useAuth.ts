@@ -9,17 +9,9 @@ export const useAuth = () => {
     password: string;
   }
 
-  interface SignUpResponse {
-    access_token: string;
-  }
-
   interface SignInPayload {
     email: string;
     password: string;
-  }
-
-  interface SignInResponse {
-    access_token: string;
   }
 
   const requestSignIn = async (payload: SignInPayload) => {

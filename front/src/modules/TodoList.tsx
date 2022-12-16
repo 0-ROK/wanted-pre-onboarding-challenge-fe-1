@@ -8,14 +8,21 @@ import {
   ListItemText,
 } from "@mui/material";
 import React from "react";
-import { ToDoItem } from "../hooks/useTodo";
+import { ToDoItem, UpdateTodoPayload } from "../hooks/useTodo";
 
 interface TodoListProps {
   todos: Array<ToDoItem>;
   deleteTodo: (id: number) => void;
+  updateTodo: (id: number, payload: UpdateTodoPayload) => void;
+  setEditTodoItem: (state: ToDoItem | false) => void;
 }
 
-const TodoList: React.FC<TodoListProps> = ({ todos, deleteTodo }) => {
+const TodoList: React.FC<TodoListProps> = ({
+  todos,
+  deleteTodo,
+  updateTodo,
+  setEditTodoItem,
+}) => {
   return (
     <List sx={{ width: "100%", height: "100%", bgcolor: "background.paper" }}>
       {todos.map((todo) => {
@@ -28,10 +35,7 @@ const TodoList: React.FC<TodoListProps> = ({ todos, deleteTodo }) => {
                   variant="outlined"
                   onClick={(e) => {
                     e.preventDefault();
-                    // updateTodo(todo.id, {
-                    //   todo: editTodo,
-                    //   isCompleted: todo.isCompleted,
-                    // });
+                    setEditTodoItem(todo);
                   }}
                 >
                   수정
@@ -50,11 +54,7 @@ const TodoList: React.FC<TodoListProps> = ({ todos, deleteTodo }) => {
             }
             disablePadding
           >
-            <ListItemButton
-              role={undefined}
-              // onClick={handleToggle(value)}
-              dense
-            >
+            <ListItemButton role={undefined} dense>
               <ListItemIcon>
                 <Checkbox
                   edge="start"
@@ -63,14 +63,14 @@ const TodoList: React.FC<TodoListProps> = ({ todos, deleteTodo }) => {
                   disableRipple
                   onChange={(e) => {
                     e.preventDefault();
-                    // updateTodo(todo.id, {
-                    //   todo: todo.todo,
-                    //   isCompleted: !todo.isCompleted,
-                    // });
+                    updateTodo(todo.id, {
+                      todo: todo.todo,
+                      isCompleted: !todo.isCompleted,
+                    });
                   }}
                 />
               </ListItemIcon>
-              <ListItemText primary={`Line item ${todo.todo}`} />
+              <ListItemText primary={todo.todo} />
             </ListItemButton>
           </ListItem>
         );

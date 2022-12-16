@@ -1,12 +1,6 @@
-import {
-  Button,
-  IconButton,
-  Input,
-  ListItem,
-  ListItemButton,
-} from "@mui/material";
+import { Button, Input, ListItem, ListItemButton } from "@mui/material";
 import React, { useState } from "react";
-import { CreateTodoPayload, useTodo } from "../hooks/useTodo";
+import { CreateTodoPayload } from "../hooks/useTodo";
 
 interface AddTodoProps {
   createTodo: (payload: CreateTodoPayload) => void;
@@ -25,6 +19,7 @@ const AddTodo: React.FC<AddTodoProps> = ({ createTodo }) => {
             createTodo({ todo: addTask });
             setAddTask("");
           }}
+          // disabled={!addTask}
         >
           추가하기
         </Button>

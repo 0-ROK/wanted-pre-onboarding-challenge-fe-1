@@ -1,21 +1,13 @@
-import {
-  Button,
-  Card,
-  Checkbox,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
-import React, { useState } from "react";
-import { useTodo } from "../hooks/useTodo";
+import { Card } from "@mui/material";
+import { useState } from "react";
+import { ToDoItem, useTodo } from "../hooks/useTodo";
 import AddTodo from "../modules/AddTodo";
+import EditTodo from "../modules/EditTodo";
+import TodoList from "../modules/TodoList";
 
 const TodoPage = () => {
   const { todos, createTodo, updateTodo, deleteTodo } = useTodo();
-  const [editTodo, setEditTodo] = useState<string>("");
+  const [editTodoItem, setEditTodoItem] = useState<ToDoItem | false>(false);
 
   return (
     <div className="App-header" style={{ display: "flex" }}>
@@ -27,72 +19,23 @@ const TodoPage = () => {
           justifyContent: "center",
         }}
       >
-        <AddTodo createTodo={createTodo} />
-        <List
-          sx={{ width: "100%", height: "100%", bgcolor: "background.paper" }}
-        >
-          {todos.map((todo) => {
-            return (
-              <ListItem
-                key={todo.id}
-                secondaryAction={
-                  <>
-                    <Button
-                      variant="outlined"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        updateTodo(todo.id, {
-                          todo: editTodo,
-                          isCompleted: todo.isCompleted,
-                        });
-                      }}
-                    >
-                      수정
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        deleteTodo(todo.id);
-                      }}
-                    >
-                      삭제
-                    </Button>
-                  </>
-                }
-                disablePadding
-              >
-                <ListItemButton
-                  role={undefined}
-                  // onClick={handleToggle(value)}
-                  dense
-                >
-                  <ListItemIcon>
-                    <Checkbox
-                      edge="start"
-                      checked={todo.isCompleted}
-                      tabIndex={-1}
-                      disableRipple
-                      onChange={(e) => {
-                        e.preventDefault();
-                        updateTodo(todo.id, {
-                          todo: todo.todo,
-                          isCompleted: !todo.isCompleted,
-                        });
-                      }}
-                      // inputProps={{ "aria-labelledby": labelId }}
-                    />
-                  </ListItemIcon>
-                  <ListItemText
-                    // id={todo.id}
-                    primary={`Line item ${todo.todo}`}
-                  />
-                </ListItemButton>
-              </ListItem>
-            );
-          })}
-        </List>
+        {editTodoItem ? (
+          <EditTodo
+            todoItem={editTodoItem}
+            setEditTodoItem={setEditTodoItem}
+            updateTodo={updateTodo}
+          />
+        ) : (
+          <>
+            <AddTodo createTodo={createTodo} />
+            <TodoList
+              todos={todos}
+              deleteTodo={deleteTodo}
+              updateTodo={updateTodo}
+              setEditTodoItem={setEditTodoItem}
+            />
+          </>
+        )}
       </Card>
     </div>
   );

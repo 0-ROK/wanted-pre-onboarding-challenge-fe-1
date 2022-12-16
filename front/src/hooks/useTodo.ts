@@ -19,6 +19,7 @@ export interface UpdateTodoPayload {
 
 export const useTodo = () => {
   const createTodo = async (payload: CreateTodoPayload) => {
+    if (!payload.todo) return;
     try {
       const response = await axios.post("/todos", payload, {
         headers: {
