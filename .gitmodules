@@ -1,3 +1,6 @@
 [submodule "back"]
 	path = back
-	url = https://github.com/0-ROK/selection-task.git
+	url = https://github.com/starkoora/wanted-pre-onboarding-challenge-fe-1-api.git
+[submodule "api"]
+	path = api
+	url = https://github.com/starkoora/wanted-pre-onboarding-challenge-fe-1-api.git
