@@ -11,7 +11,7 @@ const SignUp: React.FC<SignUpProps> = ({ setAuthToken }) => {
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
 
-  const { requestSignUp } = useAuth();
+  const { signUp } = useAuth();
 
   return (
     <>
@@ -20,16 +20,11 @@ const SignUp: React.FC<SignUpProps> = ({ setAuthToken }) => {
       </Typography>
 
       <form
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
-          (async () => {
-            try {
-              await requestSignUp({ email, password });
-              setAuthToken(localStorage.getItem("access_token"));
-            } catch (error) {
-              console.log(error);
-            }
-          })();
+          signUp({ email, password })
+            .then((res) => setAuthToken(res))
+            .catch((err) => console.log(err));
         }}
       >
         <TextField
@@ -49,8 +44,8 @@ const SignUp: React.FC<SignUpProps> = ({ setAuthToken }) => {
 
         <div style={{ fontSize: "15px", color: "red", width: "100%" }}>
           {!!email.length &&
-            !email.includes("@") &&
-            "이메일에는 '@'가 포함되어야 해요."}
+            (!email.includes("@") || !email.includes(".")) &&
+            "이메일에는 @와 .이 포함되어야 해요."}
         </div>
 
         <TextField
@@ -78,7 +73,7 @@ const SignUp: React.FC<SignUpProps> = ({ setAuthToken }) => {
           fullWidth
           name="password-check"
           label="비밀번호"
-          type="password-check"
+          type="password"
           id="password-check"
           value={passwordCheck}
           onChange={(e) => setPasswordCheck(e.target.value)}

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { string } from "prop-types";
 
 export const useAuth = () => {
   const navigate = useNavigate();
@@ -14,28 +15,33 @@ export const useAuth = () => {
     password: string;
   }
 
-  const requestSignIn = async (payload: SignInPayload) => {
+  const signIn = async (payload: SignInPayload): Promise<string> => {
     try {
-      const { data } = await axios.post("/auth/signin", payload);
+      const response = await axios.post("/users/login", payload);
 
-      localStorage.setItem("access_token", data.access_token);
+      if (response.status !== 200) throw Error(`${response.status}`);
 
-      navigate("/todo");
+      localStorage.setItem("token", response.data.token);
+
+      return response.data.token;
     } catch (error) {
       throw error;
     }
   };
 
-  const requestSignUp = async (payload: SignUpPayload) => {
+  const signUp = async (payload: SignUpPayload): Promise<string> => {
     try {
-      const { data } = await axios.post("/auth/signup", payload);
-      localStorage.setItem("access_token", data.access_token);
+      const response = await axios.post("/users/create", payload);
 
-      navigate("/todo");
+      if (response.status !== 200) throw Error(`${response.status}`);
+
+      localStorage.setItem("token", response.data.token);
+
+      return response.data.token;
     } catch (error) {
       throw error;
     }
   };
 
-  return { requestSignUp, requestSignIn };
+  return { signUp, signIn };
 };

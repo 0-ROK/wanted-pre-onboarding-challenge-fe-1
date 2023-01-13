@@ -11,7 +11,7 @@ const SignIn: React.FC<SignInProps> = ({ setAuthToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { requestSignIn } = useAuth();
+  const { signIn } = useAuth();
 
   return (
     <>
@@ -20,16 +20,11 @@ const SignIn: React.FC<SignInProps> = ({ setAuthToken }) => {
       </Typography>
 
       <form
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
-          (async () => {
-            try {
-              await requestSignIn({ email, password });
-              setAuthToken(localStorage.getItem("access_token"));
-            } catch (error) {
-              console.log(error);
-            }
-          })();
+          signIn({ email, password })
+            .then((res) => setAuthToken(res))
+            .catch((err) => console.log(err));
         }}
       >
         <TextField
@@ -49,8 +44,8 @@ const SignIn: React.FC<SignInProps> = ({ setAuthToken }) => {
 
         <div style={{ fontSize: "15px", color: "red", width: "100%" }}>
           {!!email.length &&
-            !email.includes("@") &&
-            "이메일에는 '@'가 포함되어야 해요."}
+            (!email.includes("@") || !email.includes(".")) &&
+            "이메일에는 @와 .이 포함되어야 해요."}
         </div>
 
         <TextField

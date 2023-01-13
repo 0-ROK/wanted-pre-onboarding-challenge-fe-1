@@ -6,22 +6,25 @@ import TodoPage from "./pages/TodoPage";
 
 function App() {
   const [authToken, setAuthToken] = useState<string | null>(
-    localStorage.getItem("access_token")
+    localStorage.getItem("token")
   );
 
   if (!authToken) {
     return (
       <Routes>
-        <Route path="/" element={<SignPage setAuthToken={setAuthToken} />} />
-        <Route path="*" element={<Navigate replace to="/" />} />
+        <Route
+          path="/auth"
+          element={<SignPage setAuthToken={setAuthToken} />}
+        />
+        <Route path="*" element={<Navigate replace to="/auth" />} />
       </Routes>
     );
   }
 
   return (
     <Routes>
-      <Route path="/" element={<Navigate replace to="/todo" />} />
-      <Route path="/todo" element={<TodoPage />} />
+      <Route path="/" element={<TodoPage />} />
+      <Route path="*" element={<Navigate replace to="/" />} />
     </Routes>
   );
 }
